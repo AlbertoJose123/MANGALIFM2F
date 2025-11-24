@@ -40,21 +40,43 @@
         }
 
         .profile-photo {
-            width: 140px;
-            height: 140px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
+            font-size: 64px;
             color: white;
             font-weight: 700;
             margin: 0 auto 20px;
-            border: 4px solid rgba(255,255,255,0.3);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            border: 5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
+            animation: subtlePulse 3s ease-in-out infinite;
+        }
+
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+            50% { box-shadow: 0 8px 32px rgba(82,183,136,0.4), 0 0 20px rgba(82,183,136,0.2); }
         }
 
         .profile-photo img {
@@ -109,18 +131,42 @@
             font-weight: 500;
             font-size: 15px;
             cursor: pointer;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: linear-gradient(180deg, #95d5b2, #52b788);
+            border-radius: 0 3px 3px 0;
+            transition: height 0.3s ease;
         }
 
         .nav-link:hover {
             background: rgba(255,255,255,0.15);
             color: white;
             transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover::before {
+            height: 60%;
         }
 
         .nav-link.active {
             background: rgba(255,255,255,0.25);
             color: white;
             font-weight: 600;
+            box-shadow: 0 4px 16px rgba(255,255,255,0.1);
+        }
+
+        .nav-link.active::before {
+            height: 80%;
         }
 
         .main-content {
@@ -137,8 +183,21 @@
             margin-bottom: 30px;
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
             display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(82,183,136,0.05), transparent);
+            animation: cardShimmer 8s infinite;
         }
 
         .content-section.active {
@@ -153,6 +212,11 @@
             }
         }
 
+        @keyframes cardShimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
         .section-header {
             font-family: 'Crimson Text', serif;
             font-size: 36px;
@@ -161,6 +225,29 @@
             padding-bottom: 15px;
             border-bottom: 3px solid #52b788;
             font-weight: 700;
+            position: relative;
+            animation: headerGlow 4s ease-in-out infinite;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #52b788, #95d5b2, #52b788);
+            animation: borderShine 3s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { text-shadow: 0 0 5px rgba(82,183,136,0); }
+            50% { text-shadow: 0 0 10px rgba(82,183,136,0.3); }
+        }
+
+        @keyframes borderShine {
+            0%, 100% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
         }
 
         .contact-bar {
@@ -265,6 +352,13 @@
             background: #40916c;
             border-radius: 50%;
             border: 3px solid #e8f4e8;
+            box-shadow: 0 0 0 0 rgba(82,183,136,0.5);
+            animation: timelinePulse 2s infinite;
+        }
+
+        @keyframes timelinePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(82,183,136,0.5); }
+            50% { box-shadow: 0 0 0 8px rgba(82,183,136,0); }
         }
 
         .education-title {
@@ -329,17 +423,44 @@
             border-radius: 12px;
             border: 2px solid #d8f3dc;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .award-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(82,183,136,0.1) 0%, transparent 70%);
+            animation: iconGlow 3s ease-in-out infinite;
         }
 
         .award-card:hover {
             transform: translateY(-5px);
             border-color: #52b788;
-            box-shadow: 0 8px 20px rgba(26,77,46,0.12);
+            box-shadow: 0 8px 20px rgba(26,77,46,0.12), 0 0 30px rgba(82,183,136,0.1);
         }
 
         .award-icon {
             font-size: 36px;
             margin-bottom: 12px;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0.6; }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         .award-text {
@@ -396,11 +517,29 @@
             font-weight: 600;
             transition: all 0.3s ease;
             cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            transition: transform 0.6s ease;
         }
 
         .skill-badge:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(64,145,108,0.3);
+            box-shadow: 0 6px 16px rgba(64,145,108,0.3), 0 0 20px rgba(82,183,136,0.2);
+        }
+
+        .skill-badge:hover::before {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
         }
 
         .reference-card {
@@ -506,7 +645,20 @@
       </svg><span id="emailText">mangalialbertojose0@gmail.com</span>
      </div>
     </div>
-    <p style="font-size: 17px; line-height: 1.8; color: #1a4d2e;">A dedicated Financial Management college student currently pursuing a Bachelor of Science in Business Administration, with a proven track record of academic excellence from elementary through college. Recognized as Class Valedictorian and recipient of the Philippine Senate Gold Medal for Academic Excellence in Senior High School, I bring strong analytical skills, leadership experience, and a commitment to continuous growth and learning.</p>
+    <p style="font-size: 17px; line-height: 1.8; color: #1a4d2e; margin-bottom: 30px;">A dedicated Financial Management college student currently pursuing a Bachelor of Science in Business Administration, with a proven track record of academic excellence from elementary through college. Recognized as Class Valedictorian and recipient of the Philippine Senate Gold Medal for Academic Excellence in Senior High School, I bring strong analytical skills, leadership experience, and a commitment to continuous growth and learning.</p>
+    <div style="padding: 25px; background: linear-gradient(135deg, #f1faee 0%, #e8f4e8 100%); border-radius: 12px; border-left: 4px solid #40916c; margin-bottom: 25px;">
+     <h3 style="font-family: 'Crimson Text', serif; font-size: 22px; font-weight: 700; color: #1a4d2e; margin: 0 0 15px 0;">Career Aspirations</h3>
+     <p style="font-size: 16px; line-height: 1.8; color: #1a4d2e; margin: 0;">I'm majoring in Financial Management because I see myself thriving in the finance world—whether that's working in a bank, becoming a financial advisor, stepping into the role of a chief financial officer, or even teaching finance someday as a professor. I'm excited to build the foundation for that future here in college.</p>
+    </div>
+    <div style="padding: 25px; background: #f8fdf8; border-radius: 12px; border-left: 4px solid #52b788; margin-bottom: 25px;">
+     <h3 style="font-family: 'Crimson Text', serif; font-size: 22px; font-weight: 700; color: #1a4d2e; margin: 0 0 15px 0;">Hobbies &amp; Interests</h3>
+     <p style="font-size: 16px; line-height: 1.8; color: #1a4d2e; margin: 0;">Outside of academics, I enjoy watching short clips on TikTok and bingeing series online, especially K-dramas and fantasy shows. I also like reading from time to time, but I'm more into writing—it's how I express myself best.</p>
+    </div>
+    <div style="padding: 30px; background: linear-gradient(135deg, #2d6a4f 0%, #1a4d2e 100%); border-radius: 12px; text-align: center;">
+     <h3 style="font-family: 'Crimson Text', serif; font-size: 20px; font-weight: 700; color: white; margin: 0 0 15px 0;">Favorite Quote</h3>
+     <p style="font-size: 18px; line-height: 1.8; color: white; margin: 0 0 10px 0; font-style: italic;">"You must be the change you wish to see in the world."</p>
+     <p style="font-size: 15px; color: rgba(255,255,255,0.85); margin: 0;">– Mahatma Gandhi</p>
+    </div>
    </section>
    <section id="personal" class="content-section">
     <h2 class="section-header">Personal Information</h2>
@@ -772,8 +924,7 @@
 
         // Load permanent profile photo on page load
         function loadPermanentPhoto() {
-           const permanentPhotoUrl = './Mangali.jpg';
-
+            const permanentPhotoUrl = './Mangali.jpg';
             
             const img = document.createElement('img');
             img.src = permanentPhotoUrl;
@@ -870,5 +1021,6 @@
             });
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a31816a93788d0b',t:'MTc2MzkwOTcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a36334802359949',t:'MTc2Mzk1ODkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+

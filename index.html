@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&amp;family=Inter:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
   <script src="/_sdk/element_sdk.js"></script>
-  <style>
+  <style type="text/css">
         body {
             box-sizing: border-box;
             margin: 0;
@@ -24,38 +24,44 @@
             position: fixed;
             left: 0;
             top: 0;
-            height: 100%;
-            width: 280px;
-            background: linear-gradient(180deg, #1a4d2e 0%, #2d6a4f 100%);
-            padding: 40px 20px;
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(90deg, #1a4d2e 0%, #2d6a4f 100%);
+            padding: 20px 50px;
             z-index: 100;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 50px;
         }
 
         .profile-section {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding-right: 50px;
+            border-right: 2px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
         }
 
         .profile-photo {
-            width: 180px;
-            height: 180px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 64px;
+            font-size: 56px;
             color: white;
             font-weight: 700;
-            margin: 0 auto 20px;
+            margin: 0;
             border: 5px solid rgba(255,255,255,0.3);
             box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
             animation: subtlePulse 3s ease-in-out infinite;
+            flex-shrink: 0;
         }
 
         .profile-photo::before {
@@ -91,71 +97,82 @@
         }
 
         .profile-initials {
-            font-size: 48px;
+            font-size: 32px;
             color: white;
             font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .profile-name {
             font-family: 'Crimson Text', serif;
-            font-size: 40px;
+            font-size: 28px;
             font-weight: 700;
             color: white;
-            margin: 0 0 8px 0;
-            line-height: 1.3;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .profile-title {
-            font-size: 13px;
+            font-size: 14px;
             color: rgba(255,255,255,0.85);
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .nav-menu {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .nav-item {
-            margin-bottom: 8px;
+            margin: 0;
         }
 
         .nav-link {
             display: block;
-            padding: 14px 20px;
+            padding: 12px 20px;
             color: rgba(255,255,255,0.85);
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.3s ease;
             font-weight: 500;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             position: relative;
+            white-space: nowrap;
         }
 
         .nav-link::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 0;
-            background: linear-gradient(180deg, #95d5b2, #52b788);
-            border-radius: 0 3px 3px 0;
-            transition: height 0.3s ease;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #95d5b2, #52b788);
+            border-radius: 3px 3px 0 0;
+            transition: width 0.3s ease;
         }
 
         .nav-link:hover {
             background: rgba(255,255,255,0.15);
             color: white;
-            transform: translateX(5px);
+            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .nav-link:hover::before {
-            height: 60%;
+            width: 60%;
         }
 
         .nav-link.active {
@@ -166,13 +183,13 @@
         }
 
         .nav-link.active::before {
-            height: 80%;
+            width: 80%;
         }
 
         .main-content {
-            margin-left: 280px;
-            padding: 50px;
-            min-height: 100%;
+            margin-top: 180px;
+            padding: 50px 50px 80px 50px;
+            min-height: calc(100% - 180px);
         }
 
         .content-section {
@@ -570,37 +587,268 @@
             opacity: 0.9;
         }
 
+        .copyright-footer {
+            text-align: center;
+            color: #52b788;
+            font-size: 12px;
+            margin-top: 40px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
         @media (max-width: 968px) {
             .sidebar {
-                position: relative;
-                width: 100%;
                 height: auto;
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .profile-section {
+                border-right: none;
+                border-bottom: 2px solid rgba(255,255,255,0.2);
+                padding-right: 0;
+                padding-bottom: 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-photo {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+                border: 4px solid rgba(255,255,255,0.3);
+            }
+
+            .profile-name {
+                font-size: 22px;
+            }
+
+            .profile-title {
+                font-size: 13px;
+            }
+
+            .nav-menu {
+                justify-content: center;
+                gap: 6px;
+            }
+
+            .nav-link {
+                font-size: 12px;
+                padding: 8px 12px;
             }
 
             .main-content {
-                margin-left: 0;
-                padding: 30px 20px;
+                margin-top: auto;
+                padding: 20px 15px 70px 15px;
             }
 
             .content-section {
-                padding: 30px 25px;
+                padding: 25px 20px;
+                border-radius: 12px;
             }
 
             .section-header {
-                font-size: 28px;
+                font-size: 24px;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
             }
 
             .contact-bar {
                 flex-direction: column;
-                gap: 15px;
+                gap: 12px;
+                padding: 20px;
+            }
+
+            .contact-item {
+                font-size: 14px;
+                word-break: break-word;
             }
 
             .info-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .info-card {
+                padding: 15px;
+            }
+
+            .objective-text {
+                font-size: 15px;
+                padding: 20px;
+            }
+
+            .education-timeline {
+                padding-left: 30px;
+            }
+
+            .education-item {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+
+            .education-item::before {
+                left: -38px;
+                width: 14px;
+                height: 14px;
+            }
+
+            .education-title {
+                font-size: 20px;
+            }
+
+            .education-subtitle {
+                font-size: 15px;
+            }
+
+            .education-details li {
+                font-size: 14px;
+                padding-left: 20px;
             }
 
             .awards-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .award-card {
+                padding: 20px;
+            }
+
+            .award-icon {
+                font-size: 32px;
+            }
+
+            .award-text {
+                font-size: 14px;
+            }
+
+            .activities-list li {
+                font-size: 14px;
+                padding: 15px 20px 15px 45px;
+                margin-bottom: 12px;
+            }
+
+            .activities-list li::before {
+                left: 20px;
+                font-size: 20px;
+            }
+
+            .skills-grid {
+                gap: 10px;
+            }
+
+            .skill-badge {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
+
+            .reference-card {
+                padding: 25px 20px;
+            }
+
+            .reference-name {
+                font-size: 22px;
+            }
+
+            .reference-position {
+                font-size: 14px;
+            }
+
+            .reference-contact {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 12px;
+            }
+
+            .profile-photo {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .profile-name {
+                font-size: 19px;
+            }
+
+            .profile-title {
+                font-size: 12px;
+            }
+
+            .nav-link {
+                font-size: 11px;
+                padding: 7px 10px;
+            }
+
+            .main-content {
+                padding: 15px 10px 70px 10px;
+            }
+
+            .content-section {
+                padding: 20px 15px;
+            }
+
+            .section-header {
+                font-size: 22px;
+            }
+
+            .contact-bar {
+                padding: 15px;
+            }
+
+            .contact-item {
+                font-size: 13px;
+            }
+
+            .objective-text {
+                font-size: 14px;
+                padding: 15px;
+            }
+
+            .education-timeline {
+                padding-left: 25px;
+            }
+
+            .education-item {
+                padding: 15px;
+            }
+
+            .education-item::before {
+                left: -33px;
+            }
+
+            .education-title {
+                font-size: 18px;
+            }
+
+            .education-subtitle {
+                font-size: 14px;
+            }
+
+            .education-details li {
+                font-size: 13px;
+            }
+
+            .award-card {
+                padding: 18px;
+            }
+
+            .activities-list li {
+                font-size: 13px;
+                padding: 12px 15px 12px 40px;
+            }
+
+            .activities-list li::before {
+                left: 15px;
+            }
+
+            .skill-badge {
+                padding: 8px 16px;
+                font-size: 12px;
             }
         }
     </style>
@@ -613,12 +861,14 @@
    <div class="profile-section">
     <div class="profile-photo" id="profilePhoto"><span class="profile-initials" id="profileInitials">AM</span>
     </div>
-    <h1 class="profile-name" id="profileName">Alberto Jose C. Mangali</h1>
-    <p class="profile-title" id="profileTitle">Financial Management Student</p>
+    <div class="profile-info">
+     <h1 class="profile-name" id="profileName">Alberto Jose C. Mangali</h1>
+     <p class="profile-title" id="profileTitle">Financial Management Student</p>
+    </div>
    </div>
    <ul class="nav-menu">
     <li class="nav-item"><a class="nav-link active" data-section="about">About Me</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="personal">Personal Information</a></li>
+    <li class="nav-item"><a class="nav-link" data-section="personal">Personal Info</a></li>
     <li class="nav-item"><a class="nav-link" data-section="objective">Objective</a></li>
     <li class="nav-item"><a class="nav-link" data-section="education">Education</a></li>
     <li class="nav-item"><a class="nav-link" data-section="awards">Awards</a></li>
@@ -748,7 +998,7 @@
     <div class="education-timeline">
      <div class="education-item">
       <div class="education-year">
-       AY 2024–Present
+       AY 2024  Present
       </div>
       <div class="education-title">
        Navotas Polytechnic College
@@ -843,7 +1093,7 @@
        📜
       </div>
       <div class="award-text">
-       Certificate of Academic Excellence – SHS Grade 11 (High Honors, SY 2022–2023)
+       Certificate of Academic Excellence - SHS Grade 11 (High Honors, SY 2022–2023)
       </div>
      </div>
      <div class="award-card">
@@ -868,7 +1118,7 @@
     <h2 class="section-header">Leadership &amp; Extracurricular Activities</h2>
     <ul class="activities-list">
      <li>Class Representative of Section FM 1C, 2nd Semester, 1st Year – Navotas Polytechnic College</li>
-     <li>2024 Philippines–South Korea International Youth Exchange Program – Delegate</li>
+     <li>2024 Philippines–South Korea International Youth Exchange Program - Delegate</li>
      <li>Interact Club of Tanza National High School – Director of Basic Education and Literacy</li>
      <li>The Sparks – Official School Publication (English) – Editor-in-Chief (2 consecutive years)</li>
      <li>Grade 12 – Class Vice-President</li>
@@ -907,6 +1157,9 @@
     </div>
    </section>
   </main>
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(26, 77, 46, 0.95); backdrop-filter: blur(10px); padding: 12px 20px; text-align: center; z-index: 50; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+   <p style="margin: 0; color: #95d5b2; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: 500;">© 2025 [ALBERTO JOSE C. MANGALI]</p>
+  </footer>
   <script>
         const defaultConfig = {
             full_name: "Alberto Jose C. Mangali",
@@ -922,7 +1175,6 @@
         const profilePhoto = document.getElementById('profilePhoto');
         const profileInitials = document.getElementById('profileInitials');
 
-        // Load permanent profile photo on page load
         function loadPermanentPhoto() {
             const permanentPhotoUrl = './Mangali.jpg';
             
@@ -936,12 +1188,10 @@
             };
             
             img.onerror = function() {
-                // If image fails to load, keep showing initials
                 profileInitials.style.display = 'flex';
             };
         }
 
-        // Load permanent photo immediately
         loadPermanentPhoto();
 
         navLinks.forEach(link => {
@@ -1021,6 +1271,8 @@
             });
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a36334802359949',t:'MTc2Mzk1ODkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a706b8b127e20e1',t:'MTc2NDU2OTQxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
+
 

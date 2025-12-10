@@ -1,1278 +1,549 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&amp;family=Inter:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
-  <script src="/_sdk/element_sdk.js"></script>
-  <style type="text/css">
+  <title>Alberto Jose C. Mangali - Interactive Resume</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
         body {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: #e8f4e8;
-            color: #1a4d2e;
-            overflow-x: hidden;
         }
-
-        * {
-            box-sizing: border-box;
+        .section-content {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
         }
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(90deg, #1a4d2e 0%, #2d6a4f 100%);
-            padding: 20px 50px;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 50px;
+        .section-content.active {
+            display: block;
         }
-
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            padding-right: 50px;
-            border-right: 2px solid rgba(255,255,255,0.2);
-            flex-shrink: 0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .profile-photo {
-            width: 140px;
-            height: 140px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.8), 
+                            0 0 60px rgba(16, 185, 129, 0.6),
+                            0 0 80px rgba(16, 185, 129, 0.4),
+                            0 8px 30px rgba(0,0,0,0.3),
+                            inset 0 0 30px rgba(255, 255, 255, 0.3); 
+            }
+            50% { 
+                box-shadow: 0 0 60px rgba(16, 185, 129, 1), 
+                            0 0 90px rgba(16, 185, 129, 0.8),
+                            0 0 120px rgba(16, 185, 129, 0.6),
+                            0 12px 40px rgba(0,0,0,0.3),
+                            inset 0 0 50px rgba(255, 255, 255, 0.5); 
+            }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        .nav-btn {
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
             border-radius: 50%;
-            background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .nav-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(5, 150, 105, 0.5);
+        }
+        .nav-btn.active {
+            background: linear-gradient(135deg, #047857 0%, #eab308 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.6);
+        }
+        .profile-image-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: visible;
+            border: 6px solid white;
+            animation: float 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 56px;
-            color: white;
-            font-weight: 700;
-            margin: 0;
-            border: 5px solid rgba(255,255,255,0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            margin: 0 auto;
             position: relative;
-            overflow: hidden;
-            animation: subtlePulse 3s ease-in-out infinite;
-            flex-shrink: 0;
         }
-
-        .profile-photo::before {
+        .profile-image-container::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 4s infinite;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.8) 25%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.8) 75%, 
+                transparent 100%);
+            background-size: 200% 200%;
+            animation: shimmer 3s linear infinite;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        @keyframes subtlePulse {
-            0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-            50% { box-shadow: 0 8px 32px rgba(82,183,136,0.4), 0 0 20px rgba(82,183,136,0.2); }
-        }
-
-        .profile-photo img {
+        .profile-image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
         }
-
-        .photo-upload-input {
-            display: none;
+        .profile-placeholder {
+            font-size: 80px;
         }
-
-        .profile-initials {
-            font-size: 32px;
-            color: white;
-            font-weight: 700;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .profile-name {
-            font-family: 'Crimson Text', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            margin: 0;
-            line-height: 1.2;
-        }
-
-        .profile-title {
-            font-size: 14px;
-            color: rgba(255,255,255,0.85);
-            line-height: 1.3;
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .nav-item {
-            margin: 0;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 12px 20px;
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            border-radius: 8px;
+        .card-hover {
             transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            position: relative;
-            white-space: nowrap;
         }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            width: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #95d5b2, #52b788);
-            border-radius: 3px 3px 0 0;
-            transition: width 0.3s ease;
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
         }
-
-        .nav-link:hover {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .gradient-text {
+            background: linear-gradient(135deg, #047857 0%, #eab308 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .nav-link:hover::before {
-            width: 60%;
-        }
-
-        .nav-link.active {
-            background: rgba(255,255,255,0.25);
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 4px 16px rgba(255,255,255,0.1);
-        }
-
-        .nav-link.active::before {
-            width: 80%;
-        }
-
-        .main-content {
-            margin-top: 180px;
-            padding: 50px 50px 80px 50px;
-            min-height: calc(100% - 180px);
-        }
-
-        .content-section {
+        .section-card {
             background: white;
             border-radius: 16px;
-            padding: 50px;
-            box-shadow: 0 4px 20px rgba(26,77,46,0.08);
-            margin-bottom: 30px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
-            display: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .content-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(82,183,136,0.05), transparent);
-            animation: cardShimmer 8s infinite;
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes cardShimmer {
-            0% { left: -100%; }
-            50%, 100% { left: 100%; }
-        }
-
-        .section-header {
-            font-family: 'Crimson Text', serif;
-            font-size: 36px;
-            color: #1a4d2e;
-            margin: 0 0 30px 0;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #52b788;
-            font-weight: 700;
-            position: relative;
-            animation: headerGlow 4s ease-in-out infinite;
-        }
-
-        .section-header::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #52b788, #95d5b2, #52b788);
-            animation: borderShine 3s ease-in-out infinite;
-        }
-
-        @keyframes headerGlow {
-            0%, 100% { text-shadow: 0 0 5px rgba(82,183,136,0); }
-            50% { text-shadow: 0 0 10px rgba(82,183,136,0.3); }
-        }
-
-        @keyframes borderShine {
-            0%, 100% { width: 0%; left: 0; }
-            50% { width: 100%; left: 0; }
-        }
-
-        .contact-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f1faee 0%, #e8f4e8 100%);
-            border-radius: 12px;
-            margin-bottom: 35px;
-            border-left: 4px solid #40916c;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 15px;
-            color: #1a4d2e;
-        }
-
-        .contact-icon {
-            width: 20px;
-            height: 20px;
-            fill: #40916c;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .info-card {
-            padding: 20px;
-            background: #f8fdf8;
-            border-radius: 10px;
-            border-left: 3px solid #52b788;
-        }
-
-        .info-label {
-            font-weight: 700;
-            color: #2d6a4f;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-
-        .info-value {
-            color: #1a4d2e;
-            font-size: 15px;
-        }
-
-        .objective-text {
-            font-size: 17px;
-            line-height: 1.8;
-            color: #1a4d2e;
-            padding: 30px;
-            background: linear-gradient(135deg, #f1faee 0%, #e8f4e8 100%);
-            border-radius: 12px;
-            border-left: 4px solid #40916c;
-            font-style: italic;
-        }
-
-        .education-timeline {
-            position: relative;
-            padding-left: 40px;
-            margin-top: 30px;
-        }
-
-        .education-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #52b788 0%, #95d5b2 100%);
-        }
-
-        .education-item {
-            position: relative;
-            margin-bottom: 35px;
-            padding: 25px;
-            background: #f8fdf8;
-            border-radius: 12px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .education-item:hover {
-            transform: translateX(8px);
-            box-shadow: 0 6px 20px rgba(26,77,46,0.1);
-        }
-
-        .education-item::before {
-            content: '';
-            position: absolute;
-            left: -48px;
-            top: 30px;
-            width: 16px;
-            height: 16px;
-            background: #40916c;
-            border-radius: 50%;
-            border: 3px solid #e8f4e8;
-            box-shadow: 0 0 0 0 rgba(82,183,136,0.5);
-            animation: timelinePulse 2s infinite;
-        }
-
-        @keyframes timelinePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(82,183,136,0.5); }
-            50% { box-shadow: 0 0 0 8px rgba(82,183,136,0); }
-        }
-
-        .education-title {
-            font-family: 'Crimson Text', serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: #1a4d2e;
-            margin: 0 0 8px 0;
-        }
-
-        .education-subtitle {
-            font-size: 16px;
-            color: #2d6a4f;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .education-year {
-            display: inline-block;
-            padding: 6px 14px;
-            background: #d8f3dc;
-            color: #2d6a4f;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .education-details {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0 0 0;
-        }
-
-        .education-details li {
-            padding: 8px 0 8px 28px;
-            position: relative;
-            color: #1a4d2e;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .education-details li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #40916c;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .awards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .award-card {
-            padding: 25px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fdf8 100%);
-            border-radius: 12px;
-            border: 2px solid #d8f3dc;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .award-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(82,183,136,0.1) 0%, transparent 70%);
-            animation: iconGlow 3s ease-in-out infinite;
-        }
-
-        .award-card:hover {
-            transform: translateY(-5px);
-            border-color: #52b788;
-            box-shadow: 0 8px 20px rgba(26,77,46,0.12), 0 0 30px rgba(82,183,136,0.1);
-        }
-
-        .award-icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-            display: inline-block;
-            animation: iconFloat 3s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes iconGlow {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.5); opacity: 0.6; }
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .award-text {
-            color: #1a4d2e;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .activities-list {
-            list-style: none;
-            padding: 0;
-            margin: 25px 0 0 0;
-        }
-
-        .activities-list li {
-            padding: 18px 25px 18px 55px;
-            margin-bottom: 15px;
-            background: #f8fdf8;
-            border-radius: 10px;
-            position: relative;
-            color: #1a4d2e;
-            font-size: 15px;
-            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #eab308;
             transition: all 0.3s ease;
         }
-
-        .activities-list li:hover {
-            background: #d8f3dc;
-            transform: translateX(5px);
+        .section-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
-
-        .activities-list li::before {
-            content: '●';
-            position: absolute;
-            left: 25px;
-            color: #40916c;
-            font-size: 24px;
-            line-height: 1;
+        .achievement-badge {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
         }
-
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 25px;
+        .skill-tag {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            transition: all 0.2s;
         }
-
-        .skill-badge {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
-            color: white;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-badge::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            transition: transform 0.6s ease;
-        }
-
-        .skill-badge:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(64,145,108,0.3), 0 0 20px rgba(82,183,136,0.2);
-        }
-
-        .skill-badge:hover::before {
-            transform: translateX(100%) translateY(100%) rotate(45deg);
-        }
-
-        .reference-card {
-            background: linear-gradient(135deg, #2d6a4f 0%, #1a4d2e 100%);
-            color: white;
-            padding: 35px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        .reference-name {
-            font-family: 'Crimson Text', serif;
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .reference-position {
-            font-size: 16px;
-            margin-bottom: 5px;
-            opacity: 0.95;
-        }
-
-        .reference-contact {
-            font-size: 15px;
-            margin-top: 15px;
-            opacity: 0.9;
-        }
-
-        .copyright-footer {
-            text-align: center;
-            color: #52b788;
-            font-size: 12px;
-            margin-top: 40px;
-            font-family: Verdana, Arial, Helvetica, sans-serif;
-        }
-
-        @media (max-width: 968px) {
-            .sidebar {
-                height: auto;
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .profile-section {
-                border-right: none;
-                border-bottom: 2px solid rgba(255,255,255,0.2);
-                padding-right: 0;
-                padding-bottom: 15px;
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-photo {
-                width: 100px;
-                height: 100px;
-                font-size: 40px;
-                border: 4px solid rgba(255,255,255,0.3);
-            }
-
-            .profile-name {
-                font-size: 22px;
-            }
-
-            .profile-title {
-                font-size: 13px;
-            }
-
-            .nav-menu {
-                justify-content: center;
-                gap: 6px;
-            }
-
-            .nav-link {
-                font-size: 12px;
-                padding: 8px 12px;
-            }
-
-            .main-content {
-                margin-top: auto;
-                padding: 20px 15px 70px 15px;
-            }
-
-            .content-section {
-                padding: 25px 20px;
-                border-radius: 12px;
-            }
-
-            .section-header {
-                font-size: 24px;
-                margin-bottom: 20px;
-                padding-bottom: 12px;
-            }
-
-            .contact-bar {
-                flex-direction: column;
-                gap: 12px;
-                padding: 20px;
-            }
-
-            .contact-item {
-                font-size: 14px;
-                word-break: break-word;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .info-card {
-                padding: 15px;
-            }
-
-            .objective-text {
-                font-size: 15px;
-                padding: 20px;
-            }
-
-            .education-timeline {
-                padding-left: 30px;
-            }
-
-            .education-item {
-                padding: 20px;
-                margin-bottom: 25px;
-            }
-
-            .education-item::before {
-                left: -38px;
-                width: 14px;
-                height: 14px;
-            }
-
-            .education-title {
-                font-size: 20px;
-            }
-
-            .education-subtitle {
-                font-size: 15px;
-            }
-
-            .education-details li {
-                font-size: 14px;
-                padding-left: 20px;
-            }
-
-            .awards-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .award-card {
-                padding: 20px;
-            }
-
-            .award-icon {
-                font-size: 32px;
-            }
-
-            .award-text {
-                font-size: 14px;
-            }
-
-            .activities-list li {
-                font-size: 14px;
-                padding: 15px 20px 15px 45px;
-                margin-bottom: 12px;
-            }
-
-            .activities-list li::before {
-                left: 20px;
-                font-size: 20px;
-            }
-
-            .skills-grid {
-                gap: 10px;
-            }
-
-            .skill-badge {
-                padding: 10px 18px;
-                font-size: 13px;
-            }
-
-            .reference-card {
-                padding: 25px 20px;
-            }
-
-            .reference-name {
-                font-size: 22px;
-            }
-
-            .reference-position {
-                font-size: 14px;
-            }
-
-            .reference-contact {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .sidebar {
-                padding: 12px;
-            }
-
-            .profile-photo {
-                width: 80px;
-                height: 80px;
-                font-size: 32px;
-            }
-
-            .profile-name {
-                font-size: 19px;
-            }
-
-            .profile-title {
-                font-size: 12px;
-            }
-
-            .nav-link {
-                font-size: 11px;
-                padding: 7px 10px;
-            }
-
-            .main-content {
-                padding: 15px 10px 70px 10px;
-            }
-
-            .content-section {
-                padding: 20px 15px;
-            }
-
-            .section-header {
-                font-size: 22px;
-            }
-
-            .contact-bar {
-                padding: 15px;
-            }
-
-            .contact-item {
-                font-size: 13px;
-            }
-
-            .objective-text {
-                font-size: 14px;
-                padding: 15px;
-            }
-
-            .education-timeline {
-                padding-left: 25px;
-            }
-
-            .education-item {
-                padding: 15px;
-            }
-
-            .education-item::before {
-                left: -33px;
-            }
-
-            .education-title {
-                font-size: 18px;
-            }
-
-            .education-subtitle {
-                font-size: 14px;
-            }
-
-            .education-details li {
-                font-size: 13px;
-            }
-
-            .award-card {
-                padding: 18px;
-            }
-
-            .activities-list li {
-                font-size: 13px;
-                padding: 12px 15px 12px 40px;
-            }
-
-            .activities-list li::before {
-                left: 15px;
-            }
-
-            .skill-badge {
-                padding: 8px 16px;
-                font-size: 12px;
-            }
+        .skill-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
- <body>
-  <nav class="sidebar">
-   <div class="profile-section">
-    <div class="profile-photo" id="profilePhoto"><span class="profile-initials" id="profileInitials">AM</span>
-    </div>
-    <div class="profile-info">
-     <h1 class="profile-name" id="profileName">Alberto Jose C. Mangali</h1>
-     <p class="profile-title" id="profileTitle">Financial Management Student</p>
-    </div>
+ <body class="h-full bg-gradient-to-br from-emerald-100 via-teal-50 to-cyan-100 relative overflow-hidden">
+  <div class="fixed inset-0 pointer-events-none overflow-hidden">
+   <div class="absolute top-0 left-0 w-96 h-96 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+   <div class="absolute top-0 right-0 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+   <div class="absolute bottom-0 left-1/2 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+  </div>
+  <div class="h-full w-full overflow-auto relative z-10">
+   <div class="min-h-full w-full px-4 py-8"><!-- Header -->
+    <header class="text-center mb-8">
+     <div class="bg-gradient-to-br from-emerald-600 via-green-600 to-teal-500 text-white py-10 px-6 rounded-3xl shadow-2xl mb-8 relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-full opacity-20">
+       <div class="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-2xl"></div>
+       <div class="absolute bottom-10 right-10 w-40 h-40 bg-lime-300 rounded-full blur-2xl"></div>
+       <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-emerald-300 rounded-full blur-2xl"></div>
+       <div class="absolute top-20 right-20 w-28 h-28 bg-teal-300 rounded-full blur-2xl"></div>
+      </div><!-- Profile Picture -->
+      <div class="profile-image-container mb-6"><img src="Mangali.jpg" alt="Alberto Jose C. Mangali" onerror="this.style.display='none'; document.getElementById('profilePlaceholder').style.display='block';">
+       <div id="profilePlaceholder" class="profile-placeholder" style="display: none;">
+        👤
+       </div>
+      </div>
+      <div class="relative z-10">
+       <h1 class="text-5xl md:text-6xl font-bold mb-3 tracking-tight">ALBERTO JOSE C. MANGALI</h1>
+       <p class="text-2xl md:text-3xl text-emerald-100 font-light">Bachelor of Science in Business Administration</p>
+       <p class="text-xl md:text-2xl text-emerald-100 font-light mt-2">Major in Financial Management Student</p>
+      </div>
+     </div><!-- Navigation -->
+     <nav class="flex flex-wrap justify-center gap-3 mb-8"><button onclick="showSection('about')" class="nav-btn active px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">👤 About Me</button> <button onclick="showSection('contact')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">📧 Contact</button> <button onclick="showSection('education')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">🎓 Education</button> <button onclick="showSection('experience')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">💼 Experience</button> <button onclick="showSection('achievements')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">🏆 Achievements</button> <button onclick="showSection('skills')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">⚡ Skills</button> <button onclick="showSection('activities')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">🌟 Activities</button> <button onclick="showSection('more')" class="nav-btn px-7 py-3 bg-emerald-100 text-emerald-800 rounded-xl font-semibold text-sm relative z-10">💭 More</button>
+     </nav>
+    </header><!-- Main Content -->
+    <main class="max-w-5xl mx-auto"><!-- About Me Section -->
+     <section id="about" class="section-content active">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-6">About Me</h2>
+       <div class="space-y-5 text-gray-700">
+        <p class="text-lg leading-relaxed">A dedicated Financial Management college student currently pursuing a Bachelor of Science in Business Administration, with a proven track record of academic excellence from elementary through college.</p>
+        <p class="text-lg leading-relaxed">Recognized as Class Valedictorian and recipient of the Philippine Senate Gold Medal for Academic Excellence in Senior High School.</p>
+        <div class="mt-8 p-8 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl border-2 border-yellow-300 card-hover">
+         <h3 class="text-2xl font-bold text-yellow-800 mb-4 flex items-center"><span class="text-3xl mr-3">🎯</span> Career Objective</h3>
+         <p class="text-gray-700 leading-relaxed text-lg">To apply the knowledge and skills I have gained from my education and experiences by contributing effectively to your company's success. I am committed to offering dedication, adaptability, and a strong work ethic, with the goal of becoming a valuable asset while continuously learning and growing in my career.</p>
+        </div>
+       </div>
+      </div>
+     </section><!-- Contact Section -->
+     <section id="contact" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Contact Information</h2>
+       <div class="grid md:grid-cols-2 gap-6">
+        <div class="flex items-start space-x-4 p-5 bg-yellow-50 rounded-xl card-hover border border-yellow-200"><span class="text-4xl">📍</span>
+         <div>
+          <p class="font-semibold text-yellow-800 mb-1">Address</p>
+          <p class="text-gray-700">1036 Adelfa St., Merville Subd., Tanza 1, Navotas City, Metro Manila</p>
+         </div>
+        </div>
+        <div class="flex items-start space-x-4 p-5 bg-yellow-50 rounded-xl card-hover border border-yellow-200"><span class="text-4xl">📱</span>
+         <div>
+          <p class="font-semibold text-yellow-800 mb-1">Phone</p>
+          <p class="text-gray-700">09917759750</p>
+         </div>
+        </div>
+        <div class="flex items-start space-x-4 p-5 bg-yellow-50 rounded-xl card-hover border border-yellow-200"><span class="text-4xl">✉️</span>
+         <div>
+          <p class="font-semibold text-yellow-800 mb-1">Email</p>
+          <p class="text-gray-700">mangalialbertojose0@gmail.com</p>
+         </div>
+        </div>
+        <div class="flex items-start space-x-4 p-5 bg-yellow-50 rounded-xl card-hover border border-yellow-200"><span class="text-4xl">🎂</span>
+         <div>
+          <p class="font-semibold text-yellow-800 mb-1">Birthday</p>
+          <p class="text-gray-700">August 26, 2006 (Age 19)</p>
+         </div>
+        </div>
+       </div>
+       <div class="mt-8 p-8 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl border-2 border-yellow-300">
+        <h3 class="text-2xl font-bold text-yellow-800 mb-6">Personal Information</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-700">
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Place of Birth</p>
+          <p class="font-medium">San Jose, Navotas City</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Citizenship</p>
+          <p class="font-medium">Filipino</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Religion</p>
+          <p class="font-medium">Roman Catholic</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Civil Status</p>
+          <p class="font-medium">Single</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Height</p>
+          <p class="font-medium">5'3"</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Weight</p>
+          <p class="font-medium">44.4 kgs</p>
+         </div>
+         <div class="p-4 bg-white rounded-lg shadow-sm border border-yellow-100 col-span-2 md:col-span-3">
+          <p class="text-xs text-yellow-700 font-semibold mb-1">Languages</p>
+          <p class="font-medium">Filipino, English</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Education Section -->
+     <section id="education" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Education</h2>
+       <div class="space-y-6">
+        <div class="p-8 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-300 shadow-lg card-hover">
+         <div class="flex items-start justify-between mb-4">
+          <h3 class="text-2xl font-bold text-emerald-700">Navotas Polytechnic College</h3><span class="px-4 py-2 bg-emerald-600 text-white rounded-full text-sm font-semibold">2024-Present</span>
+         </div>
+         <p class="text-emerald-600 font-semibold mb-4 text-lg">BSBA - Major in Financial Management</p>
+         <ul class="space-y-3 text-gray-700">
+          <li class="flex items-start"><span class="text-emerald-500 mr-2 text-xl">📚</span> Currently Sophomore</li>
+          <li class="flex items-start"><span class="text-emerald-500 mr-2 text-xl">👥</span> Class Representative of Section FM 1C, 2nd Semester, 1st Year</li>
+          <li class="flex items-start"><span class="text-emerald-500 mr-2 text-xl">🏆</span> Freshman Year: Sertipiko ng Pagkilala - Natatanging Kahusayan sa Larangan ng Akademiko</li>
+          <li class="flex items-start"><span class="text-emerald-500 mr-2 text-xl">🎓</span> Navotas Scholarship Recipient</li>
+          <li class="flex items-start"><span class="text-emerald-500 mr-2 text-xl">✅</span> Entrance Examination Passer</li>
+         </ul>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl border-2 border-yellow-300 shadow-lg card-hover">
+         <div class="flex items-start justify-between mb-4">
+          <h3 class="text-2xl font-bold text-amber-700">Tanza National High School</h3><span class="px-4 py-2 bg-amber-600 text-white rounded-full text-sm font-semibold">2023-2024</span>
+         </div>
+         <p class="text-amber-600 font-semibold mb-4 text-lg">Senior High School - ABM Strand</p>
+         <ul class="space-y-3 text-gray-700">
+          <li class="flex items-start"><span class="text-yellow-500 mr-2">🏆</span> <strong>Batch 'Sinagtala' Class Valedictorian, With Highest Honors</strong></li>
+          <li class="flex items-start"><span class="text-yellow-500 mr-2">🥇</span> <strong>Philippine Senate Gold Medal for Academic Excellence Awardee</strong></li>
+          <li class="flex items-start"><span class="text-yellow-500 mr-2">✓</span> Class Vice-President</li>
+         </ul>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 card-hover">
+         <div class="flex items-start justify-between mb-4">
+          <h3 class="text-2xl font-bold text-emerald-700">Tanza National High School</h3><span class="px-4 py-2 bg-emerald-500 text-white rounded-full text-sm font-semibold">2019-2022</span>
+         </div>
+         <p class="text-emerald-600 font-semibold mb-3 text-lg">Junior High School</p>
+         <p class="text-gray-700 flex items-start"><span class="text-emerald-500 mr-2">✓</span> With High Honors</p>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 card-hover">
+         <div class="flex items-start justify-between mb-4">
+          <h3 class="text-2xl font-bold text-emerald-700">Malabon Elementary School</h3><span class="px-4 py-2 bg-emerald-500 text-white rounded-full text-sm font-semibold">2011-2018</span>
+         </div>
+         <p class="text-gray-700 flex items-start"><span class="text-emerald-500 mr-2">✓</span> Consistent Academic Awardee</p>
+        </div>
+       </div>
+      </div>
+     </section><!-- Work Experience Section -->
+     <section id="experience" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Work Experience</h2>
+       <div class="space-y-6">
+        <div class="p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border-2 border-blue-200 shadow-lg card-hover">
+         <h3 class="text-2xl font-bold text-blue-700 mb-2 flex items-center"><span class="text-3xl mr-3">💼</span> On-the-Job Training (OJT)</h3>
+         <p class="text-blue-600 font-semibold mb-6 text-lg">Barangay Hall Tanza 2</p>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">💻 Encoding Data</p>
+           <p class="text-sm text-gray-700">Inputting residents' information into the barangay database (e.g., certificates, permits, IDs)</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">🤝 Assisting Residents</p>
+           <p class="text-sm text-gray-700">Helping people fill out forms or guiding them to the right office/desk</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">📁 Handling Documents</p>
+           <p class="text-sm text-gray-700">Organizing barangay papers such as clearances, permits, and certificates</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">🗂️ Filing Records</p>
+           <p class="text-sm text-gray-700">Sorting and filing documents in folders or cabinets for easy retrieval</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">🖨️ Photocopying &amp; Printing</p>
+           <p class="text-sm text-gray-700">Preparing copies of barangay forms, notices, and official documents</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">❓ Answering Inquiries</p>
+           <p class="text-sm text-gray-700">Responding to basic questions from residents about requirements or processes</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">📄 Preparing Certificates</p>
+           <p class="text-sm text-gray-700">Assisting in drafting barangay clearance, residency certificates, or indigency certificates</p>
+          </div>
+          <div class="p-4 bg-white rounded-xl shadow-sm">
+           <p class="font-semibold text-blue-700 mb-2">⚙️ General Office Support</p>
+           <p class="text-sm text-gray-700">Running errands inside the office, delivering papers to other departments, or assisting staff with daily tasks</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 card-hover">
+         <h3 class="text-2xl font-bold text-emerald-700 mb-3 flex items-center"><span class="text-3xl mr-3">🎓</span> Work Immersion</h3>
+         <p class="text-emerald-600 font-semibold mb-4">Senior High School</p>
+         <ul class="space-y-2 text-gray-700">
+          <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> Completed work immersion program as part of Senior High School curriculum</li>
+          <li class="flex items-start"><span class="text-emerald-500 mr-2">✓</span> Outstanding Performance in Work Immersion</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </section><!-- Achievements Section -->
+     <section id="achievements" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Academic Achievements &amp; Awards</h2>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Consistent Academic Awardee (Elementary to College)</span></p>
+        </div>
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Outstanding Performance in Science, Mathematics, Communication Arts, and Work Immersion</span></p>
+        </div>
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Certificate of Academic Excellence - SHS Grade 12 (Highest Honors)</span></p>
+        </div>
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Certificate of Academic Excellence - SHS Grade 11 (High Honors)</span></p>
+        </div>
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Certificate of Academic Excellence - JHS Completion (High Honors)</span></p>
+        </div>
+        <div class="p-6 achievement-badge rounded-xl shadow-lg card-hover">
+         <p class="text-gray-800 flex items-start"><span class="text-2xl mr-3">🏆</span> <span>Certificate of Recognition - Journalist of the Year 2023</span></p>
+        </div>
+       </div>
+       <div class="mt-10">
+        <h3 class="text-3xl font-bold text-emerald-800 mb-6 flex items-center"><span class="text-4xl mr-3">📰</span> Journalism &amp; Competitions</h3>
+        <div class="space-y-4">
+         <div class="p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200 card-hover">
+          <p class="text-gray-800 font-semibold flex items-center"><span class="text-2xl mr-3">🥉</span> 2024 Division Schools Press Conference - Secondary - News Writing - <span class="text-purple-700 ml-2">5th Placer</span></p>
+         </div>
+         <div class="p-6 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border-2 border-yellow-300 card-hover">
+          <p class="text-gray-800 font-semibold flex items-center"><span class="text-2xl mr-3">🥇</span> 2023 Division Schools Press Conference - Secondary - News Writing - <span class="text-amber-700 ml-2">1st Placer</span></p>
+         </div>
+         <div class="p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border-2 border-blue-200 card-hover">
+          <p class="text-gray-800 font-semibold flex items-center"><span class="text-2xl mr-3">🏅</span> 2023 Regional Schools Press Conference - Secondary - News Writing - <span class="text-blue-700 ml-2">Qualifier</span></p>
+         </div>
+         <div class="p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border-2 border-orange-300 card-hover">
+          <p class="text-gray-800 font-bold text-lg flex items-center"><span class="text-3xl mr-3">⭐</span> <span class="text-orange-700">Journalist of the Year 2023</span></p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Skills Section -->
+     <section id="skills" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Skills</h2>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 card-hover">
+         <h3 class="font-bold text-emerald-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">💰</span> Financial Skills</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Financial Accounting</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Journal &amp; Ledger Management</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Financial Statements</span>
+         </div>
+        </div>
+        <div class="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border-2 border-blue-200 card-hover">
+         <h3 class="font-bold text-blue-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">🖥️</span> Office Skills</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Data Entry &amp; Encoding</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Document Management</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Customer Service</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Office Administration</span>
+         </div>
+        </div>
+        <div class="p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200 card-hover">
+         <h3 class="font-bold text-purple-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">🧠</span> Analytical Skills</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Analytical Thinking</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Problem Solving</span>
+         </div>
+        </div>
+        <div class="p-6 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border-2 border-orange-200 card-hover">
+         <h3 class="font-bold text-orange-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">💬</span> Communication Skills</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Written Communication</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Oral Communication</span>
+         </div>
+        </div>
+        <div class="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl border-2 border-teal-200 card-hover">
+         <h3 class="font-bold text-teal-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">👥</span> Work Style</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Independent Work</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Team Collaboration</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Organization</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Management</span>
+         </div>
+        </div>
+        <div class="p-6 bg-gradient-to-br from-rose-50 to-red-50 rounded-2xl border-2 border-rose-200 card-hover">
+         <h3 class="font-bold text-rose-700 mb-4 text-xl flex items-center"><span class="text-2xl mr-2">⭐</span> Personal Qualities</h3>
+         <div class="flex flex-wrap gap-2"><span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Motivation</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Determination</span> <span class="skill-tag px-4 py-2 rounded-full text-sm font-medium text-emerald-800">Consistency</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Activities Section -->
+     <section id="activities" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">Leadership &amp; Extracurricular Activities</h2>
+       <div class="space-y-4">
+        <div class="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border-l-4 border-indigo-400 card-hover">
+         <p class="text-gray-800 flex items-start text-lg"><span class="text-3xl mr-4">👥</span> <span><strong>Class Representative</strong> of Section FM 1C, 2nd Semester, 1st Year - Navotas Polytechnic College</span></p>
+        </div>
+        <div class="p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-l-4 border-green-400 card-hover">
+         <p class="text-gray-800 flex items-start text-lg"><span class="text-3xl mr-4">🌏</span> <span><strong>2024 Philippines-South Korea International Youth Exchange Program</strong> - Delegate</span></p>
+        </div>
+        <div class="p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border-l-4 border-blue-400 card-hover">
+         <p class="text-gray-800 flex items-start text-lg"><span class="text-3xl mr-4">🤝</span> <span><strong>Interact Club of Tanza National High School</strong> - Director of Basic Education and Literacy</span></p>
+        </div>
+        <div class="p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border-l-4 border-amber-400 card-hover">
+         <p class="text-gray-800 flex items-start text-lg"><span class="text-3xl mr-4">✍️</span> <span><strong>The Sparks</strong> - Official School Publication (English) - Editor-in-Chief (2 consecutive years)</span></p>
+        </div>
+        <div class="p-6 bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl border-l-4 border-pink-400 card-hover">
+         <p class="text-gray-800 flex items-start text-lg"><span class="text-3xl mr-4">🎓</span> <span><strong>Grade 12</strong> - Class Vice-President | <strong>Grade 11</strong> - Class President</span></p>
+        </div>
+       </div>
+      </div>
+     </section><!-- More Section -->
+     <section id="more" class="section-content">
+      <div class="section-card card-hover p-10">
+       <h2 class="text-4xl font-bold gradient-text mb-8">More About Me</h2>
+       <div class="space-y-6">
+        <div class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 card-hover">
+         <h3 class="text-2xl font-bold text-blue-700 mb-4">Career Aspirations</h3>
+         <p class="text-gray-700 leading-relaxed text-lg">I'm majoring in Financial Management because I see myself thriving in the finance world - whether that's working in a bank, becoming a financial advisor, stepping into the role of a chief financial officer, or even teaching finance someday as a professor.</p>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200 card-hover">
+         <h3 class="text-2xl font-bold text-purple-700 mb-4">Hobbies &amp; Interests</h3>
+         <p class="text-gray-700 leading-relaxed text-lg">Outside of academics, I enjoy watching short clips on TikTok and bingeing series online, especially K-dramas and fantasy shows. I also like reading from time to time, but I'm more into writing - it's how I express myself best.</p>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-2xl border-4 border-amber-300 shadow-xl card-hover">
+         <h3 class="text-2xl font-bold text-amber-800 mb-4">My Favorite Quote</h3>
+         <p class="text-2xl italic text-gray-800 mb-3 leading-relaxed">"You must be the change you wish to see in the world."</p>
+         <p class="text-right text-amber-700 font-bold text-xl">- Mahatma Gandhi</p>
+        </div>
+        <div class="p-8 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 card-hover">
+         <h3 class="text-2xl font-bold text-emerald-700 mb-4">Character Reference</h3>
+         <div class="bg-white p-6 rounded-xl shadow-sm">
+          <p class="text-xl font-bold text-emerald-800 mb-1">Dr. Jassele S. Lim</p>
+          <p class="text-gray-700 mb-1">Senior High School Teacher and Adviser</p>
+          <p class="text-gray-700 mb-1">Tanza National High School - SDO Navotas City</p>
+          <p class="text-gray-700 mt-3">09454121241</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section>
+    </main><!-- Footer -->
+    <footer class="text-center mt-12 pb-8">
+     <div class="bg-gradient-to-r from-green-600 to-yellow-600 text-white py-5 px-8 rounded-2xl inline-block shadow-lg">
+      <p class="text-sm font-medium">© 2025 Alberto Jose C. Mangali | All Rights Reserved</p>
+     </div>
+    </footer>
    </div>
-   <ul class="nav-menu">
-    <li class="nav-item"><a class="nav-link active" data-section="about">About Me</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="personal">Personal Info</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="objective">Objective</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="education">Education</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="awards">Awards</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="leadership">Leadership</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="journalism">Journalism</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="skills">Skills</a></li>
-    <li class="nav-item"><a class="nav-link" data-section="reference">Reference</a></li>
-   </ul>
-  </nav>
-  <main class="main-content">
-   <section id="about" class="content-section active">
-    <h2 class="section-header">About Me</h2>
-    <div class="contact-bar">
-     <div class="contact-item">
-      <svg class="contact-icon" viewbox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-      </svg><span id="addressText">1036 Adelfa St., Merville Subd., Tanza 1, Navotas City, Metro Manila</span>
-     </div>
-     <div class="contact-item">
-      <svg class="contact-icon" viewbox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-      </svg><span id="phoneText">09917759750</span>
-     </div>
-     <div class="contact-item">
-      <svg class="contact-icon" viewbox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-      </svg><span id="emailText">mangalialbertojose0@gmail.com</span>
-     </div>
-    </div>
-    <p style="font-size: 17px; line-height: 1.8; color: #1a4d2e; margin-bottom: 30px;">A dedicated Financial Management college student currently pursuing a Bachelor of Science in Business Administration, with a proven track record of academic excellence from elementary through college. Recognized as Class Valedictorian and recipient of the Philippine Senate Gold Medal for Academic Excellence in Senior High School, I bring strong analytical skills, leadership experience, and a commitment to continuous growth and learning.</p>
-    <div style="padding: 25px; background: linear-gradient(135deg, #f1faee 0%, #e8f4e8 100%); border-radius: 12px; border-left: 4px solid #40916c; margin-bottom: 25px;">
-     <h3 style="font-family: 'Crimson Text', serif; font-size: 22px; font-weight: 700; color: #1a4d2e; margin: 0 0 15px 0;">Career Aspirations</h3>
-     <p style="font-size: 16px; line-height: 1.8; color: #1a4d2e; margin: 0;">I'm majoring in Financial Management because I see myself thriving in the finance world—whether that's working in a bank, becoming a financial advisor, stepping into the role of a chief financial officer, or even teaching finance someday as a professor. I'm excited to build the foundation for that future here in college.</p>
-    </div>
-    <div style="padding: 25px; background: #f8fdf8; border-radius: 12px; border-left: 4px solid #52b788; margin-bottom: 25px;">
-     <h3 style="font-family: 'Crimson Text', serif; font-size: 22px; font-weight: 700; color: #1a4d2e; margin: 0 0 15px 0;">Hobbies &amp; Interests</h3>
-     <p style="font-size: 16px; line-height: 1.8; color: #1a4d2e; margin: 0;">Outside of academics, I enjoy watching short clips on TikTok and bingeing series online, especially K-dramas and fantasy shows. I also like reading from time to time, but I'm more into writing—it's how I express myself best.</p>
-    </div>
-    <div style="padding: 30px; background: linear-gradient(135deg, #2d6a4f 0%, #1a4d2e 100%); border-radius: 12px; text-align: center;">
-     <h3 style="font-family: 'Crimson Text', serif; font-size: 20px; font-weight: 700; color: white; margin: 0 0 15px 0;">Favorite Quote</h3>
-     <p style="font-size: 18px; line-height: 1.8; color: white; margin: 0 0 10px 0; font-style: italic;">"You must be the change you wish to see in the world."</p>
-     <p style="font-size: 15px; color: rgba(255,255,255,0.85); margin: 0;">– Mahatma Gandhi</p>
-    </div>
-   </section>
-   <section id="personal" class="content-section">
-    <h2 class="section-header">Personal Information</h2>
-    <div class="info-grid">
-     <div class="info-card">
-      <div class="info-label">
-       Date of Birth
-      </div>
-      <div class="info-value">
-       August 26, 2006
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Age
-      </div>
-      <div class="info-value">
-       19
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Place of Birth
-      </div>
-      <div class="info-value">
-       San Jose, Navotas City
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Citizenship
-      </div>
-      <div class="info-value">
-       Filipino
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Religion
-      </div>
-      <div class="info-value">
-       Roman Catholic
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Civil Status
-      </div>
-      <div class="info-value">
-       Single
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Height
-      </div>
-      <div class="info-value">
-       5'3"
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Weight
-      </div>
-      <div class="info-value">
-       44.4 kgs
-      </div>
-     </div>
-     <div class="info-card">
-      <div class="info-label">
-       Languages
-      </div>
-      <div class="info-value">
-       Filipino, English
-      </div>
-     </div>
-    </div>
-   </section>
-   <section id="objective" class="content-section">
-    <h2 class="section-header">Career Objective</h2>
-    <div class="objective-text" id="objectiveText">
-     To apply the knowledge and skills I have gained from my education and experiences by contributing effectively to your company's success. I am committed to offering dedication, adaptability, and a strong work ethic, with the goal of becoming a valuable asset while continuously learning and growing in my career.
-    </div>
-   </section>
-   <section id="education" class="content-section">
-    <h2 class="section-header">Education</h2>
-    <div class="education-timeline">
-     <div class="education-item">
-      <div class="education-year">
-       AY 2024  Present
-      </div>
-      <div class="education-title">
-       Navotas Polytechnic College
-      </div>
-      <div class="education-subtitle">
-       BSBA – Major in Financial Management (Currently Sophomore)
-      </div>
-      <ul class="education-details">
-       <li>Class Representative of Section FM 1C, 2nd Semester, 1st Year</li>
-       <li>Freshman Year: Sertipiko ng Pagkilala – Natatanging Kahusayan sa Larangan ng Akademiko (AY 2024–2025)</li>
-       <li>Navotas Scholarship Recipient</li>
-       <li>Entrance Examination Passer</li>
-      </ul>
-     </div>
-     <div class="education-item">
-      <div class="education-year">
-       SY 2023–2024
-      </div>
-      <div class="education-title">
-       Tanza National High School
-      </div>
-      <div class="education-subtitle">
-       Senior High School – Accountancy, Business and Management (ABM) Strand, SDO Navotas City
-      </div>
-      <ul class="education-details">
-       <li>Batch 'Sinagtala' Class Valedictorian, With Highest Honors</li>
-       <li>Class Vice-President</li>
-       <li>Philippine Senate Gold Medal for Academic Excellence Awardee</li>
-       <li>Delivered Valedictory Speech: "Mensahe mula sa Kinatawan ng Magsisipagtapos"</li>
-      </ul>
-     </div>
-     <div class="education-item">
-      <div class="education-year">
-       SY 2019–2022
-      </div>
-      <div class="education-title">
-       Junior High School
-      </div>
-      <div class="education-subtitle">
-       Tanza National High School – SDO Navotas City
-      </div>
-      <ul class="education-details">
-       <li>With High Honors</li>
-       <li>Also attended: Malabon National High School – SDO Malabon City (SY 2018–2019)</li>
-      </ul>
-     </div>
-     <div class="education-item">
-      <div class="education-year">
-       SY 2011–2018
-      </div>
-      <div class="education-title">
-       Elementary
-      </div>
-      <div class="education-subtitle">
-       Malabon Elementary School – SDO Malabon City
-      </div>
-      <ul class="education-details">
-       <li>Consistent Academic Awardee</li>
-      </ul>
-     </div>
-    </div>
-   </section>
-   <section id="awards" class="content-section">
-    <h2 class="section-header">Academic Achievements &amp; Awards</h2>
-    <div class="awards-grid">
-     <div class="award-card">
-      <div class="award-icon">
-       🏆
-      </div>
-      <div class="award-text">
-       Consistent Academic Awardee (Elementary to College)
-      </div>
-     </div>
-     <div class="award-card">
-      <div class="award-icon">
-       ⭐
-      </div>
-      <div class="award-text">
-       Outstanding Performance in Science, Mathematics, Communication Arts, and Work Immersion
-      </div>
-     </div>
-     <div class="award-card">
-      <div class="award-icon">
-       📜
-      </div>
-      <div class="award-text">
-       Certificate of Academic Excellence – SHS Grade 12 (Highest Honors, SY 2023–2024)
-      </div>
-     </div>
-     <div class="award-card">
-      <div class="award-icon">
-       📜
-      </div>
-      <div class="award-text">
-       Certificate of Academic Excellence - SHS Grade 11 (High Honors, SY 2022–2023)
-      </div>
-     </div>
-     <div class="award-card">
-      <div class="award-icon">
-       📜
-      </div>
-      <div class="award-text">
-       Certificate of Academic Excellence – JHS Completion (High Honors, SY 2021–2022)
-      </div>
-     </div>
-     <div class="award-card">
-      <div class="award-icon">
-       ✍️
-      </div>
-      <div class="award-text">
-       Certificate of Recognition – Journalist of the Year 2023
-      </div>
-     </div>
-    </div>
-   </section>
-   <section id="leadership" class="content-section">
-    <h2 class="section-header">Leadership &amp; Extracurricular Activities</h2>
-    <ul class="activities-list">
-     <li>Class Representative of Section FM 1C, 2nd Semester, 1st Year – Navotas Polytechnic College</li>
-     <li>2024 Philippines–South Korea International Youth Exchange Program - Delegate</li>
-     <li>Interact Club of Tanza National High School – Director of Basic Education and Literacy</li>
-     <li>The Sparks – Official School Publication (English) – Editor-in-Chief (2 consecutive years)</li>
-     <li>Grade 12 – Class Vice-President</li>
-     <li>Grade 11 – Class President</li>
-    </ul>
-   </section>
-   <section id="journalism" class="content-section">
-    <h2 class="section-header">Journalism &amp; Competitions</h2>
-    <ul class="activities-list">
-     <li>2024 Division Schools Press Conference – Secondary – News Writing – 5th Placer</li>
-     <li>2023 Division Schools Press Conference – Secondary – News Writing – 1st Placer</li>
-     <li>2023 Regional Schools Press Conference – Secondary – News Writing – Qualifier</li>
-     <li>Journalist of the Year 2023</li>
-    </ul>
-   </section>
-   <section id="skills" class="content-section">
-    <h2 class="section-header">Skills</h2>
-    <div class="skills-grid"><span class="skill-badge">Financial Accounting</span> <span class="skill-badge">Journal &amp; Ledger Management</span> <span class="skill-badge">Financial Statements</span> <span class="skill-badge">Analytical Thinking</span> <span class="skill-badge">Problem Solving</span> <span class="skill-badge">Written Communication</span> <span class="skill-badge">Oral Communication</span> <span class="skill-badge">Independent Work</span> <span class="skill-badge">Team Collaboration</span> <span class="skill-badge">Organization</span> <span class="skill-badge">Management</span> <span class="skill-badge">Motivation</span> <span class="skill-badge">Determination</span> <span class="skill-badge">Consistency</span>
-    </div>
-   </section>
-   <section id="reference" class="content-section">
-    <h2 class="section-header">Character Reference</h2>
-    <div class="reference-card">
-     <div class="reference-name">
-      Dr. Jassele S. Lim
-     </div>
-     <div class="reference-position">
-      Senior High School Teacher and Adviser
-     </div>
-     <div class="reference-position">
-      Tanza National High School – SDO Navotas City
-     </div>
-     <div class="reference-contact">
-      📞 09454121241
-     </div>
-    </div>
-   </section>
-  </main>
-  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(26, 77, 46, 0.95); backdrop-filter: blur(10px); padding: 12px 20px; text-align: center; z-index: 50; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
-   <p style="margin: 0; color: #95d5b2; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: 500;">© 2025 [ALBERTO JOSE C. MANGALI]</p>
-  </footer>
+  </div>
   <script>
-        const defaultConfig = {
-            full_name: "Alberto Jose C. Mangali",
-            job_title: "Financial Management Student",
-            email: "mangalialbertojose0@gmail.com",
-            phone: "09917759750",
-            address: "1036 Adelfa St., Merville Subd., Tanza 1, Navotas City, Metro Manila",
-            objective_text: "To apply the knowledge and skills I have gained from my education and experiences by contributing effectively to your company's success. I am committed to offering dedication, adaptability, and a strong work ethic, with the goal of becoming a valuable asset while continuously learning and growing in my career."
-        };
-
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.content-section');
-        const profilePhoto = document.getElementById('profilePhoto');
-        const profileInitials = document.getElementById('profileInitials');
-
-        function loadPermanentPhoto() {
-            const permanentPhotoUrl = './Mangali.jpg';
-            
-            const img = document.createElement('img');
-            img.src = permanentPhotoUrl;
-            img.alt = 'Alberto Jose C. Mangali';
-            
-            img.onload = function() {
-                profileInitials.style.display = 'none';
-                profilePhoto.appendChild(img);
-            };
-            
-            img.onerror = function() {
-                profileInitials.style.display = 'flex';
-            };
-        }
-
-        loadPermanentPhoto();
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetSection = this.getAttribute('data-section');
-                
-                navLinks.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                sections.forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                const target = document.getElementById(targetSection);
-                if (target) {
-                    target.classList.add('active');
-                    if (window.innerWidth > 968) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(section => {
+                section.classList.remove('active');
             });
-        });
 
-        async function onConfigChange(config) {
-            const fullName = config.full_name || defaultConfig.full_name;
-            const jobTitle = config.job_title || defaultConfig.job_title;
-            const email = config.email || defaultConfig.email;
-            const phone = config.phone || defaultConfig.phone;
-            const address = config.address || defaultConfig.address;
-            const objectiveText = config.objective_text || defaultConfig.objective_text;
-
-            document.getElementById('profileName').textContent = fullName;
-            document.getElementById('profileTitle').textContent = jobTitle;
-            document.getElementById('emailText').textContent = email;
-            document.getElementById('phoneText').textContent = phone;
-            document.getElementById('addressText').textContent = address;
-            document.getElementById('objectiveText').textContent = objectiveText;
-
-            const nameParts = fullName.split(' ');
-            const initials = nameParts.length >= 2 
-                ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
-                : fullName.substring(0, 2).toUpperCase();
-            
-            const profileInitialsElement = document.getElementById('profileInitials');
-            if (profileInitialsElement) {
-                profileInitialsElement.textContent = initials;
-            }
-        }
-
-        function mapToCapabilities(config) {
-            return {
-                recolorables: [],
-                borderables: [],
-                fontEditable: undefined,
-                fontSizeable: undefined
-            };
-        }
-
-        function mapToEditPanelValues(config) {
-            return new Map([
-                ["full_name", config.full_name || defaultConfig.full_name],
-                ["job_title", config.job_title || defaultConfig.job_title],
-                ["email", config.email || defaultConfig.email],
-                ["phone", config.phone || defaultConfig.phone],
-                ["address", config.address || defaultConfig.address],
-                ["objective_text", config.objective_text || defaultConfig.objective_text]
-            ]);
-        }
-
-        if (window.elementSdk) {
-            window.elementSdk.init({
-                defaultConfig,
-                onConfigChange,
-                mapToCapabilities,
-                mapToEditPanelValues
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
             });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Smooth scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a706b8b127e20e1',t:'MTc2NDU2OTQxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9abaed40a4bd6e58',t:'MTc2NTM1MDY3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
-
-
